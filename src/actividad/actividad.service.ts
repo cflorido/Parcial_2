@@ -31,8 +31,6 @@ export class ActividadService {
 
 
 
-
-
     async cambiarEstado(actividadID: number, estado: number): Promise<ActividadEntity> {
         const actividad = await this.actividadRepository.findOne({ where: { id: actividadID }, relations: ['estudiantes'] });
         if (!actividad) throw new NotFoundException('No se encontro la ectividad');
@@ -46,11 +44,6 @@ export class ActividadService {
                 throw new BadRequestException('Hay un error: el 80% del cupo debe estar está lleno');
             }
         }
-
-
-
-
-
 
         if (estado === 2) {
             if (actividad.estudiantes.length < actividad.cupoMaximo) {
