@@ -62,6 +62,8 @@ export class EstudianteService {
             throw new BadRequestException('El estudiante no se puede incribir');
         }
 
+        
+
         actividad.estudiantes.push(estudiante);
         await this.actividadRepository.save(actividad);
         return 'Se ha incrito al estudiante a la actividad';
