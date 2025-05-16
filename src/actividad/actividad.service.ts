@@ -10,21 +10,23 @@ export class ActividadService {
         private actividadRepository: Repository<ActividadEntity>,
     ) {}
 
-
-
     async crearActividad(data: Partial<ActividadEntity>): Promise<ActividadEntity> {
-  
-        //MANEJAR CORREO
 
-        const simbolosRegex = /[^a-zA-Z0-9\s]/;
+
         if (!data.titulo || data.titulo.length < 15) {
             throw new BadRequestException('El título debe tener al menos 15 caracteres');
         }
+
+        // Aqui no debe tener un titulo con simbolos AAAA
+        const simbolosRegex = /[^a-zA-Z0-9\s]/;
         if (simbolosRegex.test(data.titulo)) {
             throw new BadRequestException('El título no puede contener símbolos');
         }
+
+        //Decision de diseño: En este caso se decidio que el estado de la actividad se inicializa en 0
         const actividad = this.actividadRepository.create({...data, estado: 0 });
         return this.actividadRepository.save(actividad);
+
     }
 
 
