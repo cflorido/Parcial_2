@@ -32,7 +32,8 @@ export class ActividadService {
 
 
     async cambiarEstado(actividadID: number, estado: number): Promise<ActividadEntity> {
-        const actividad = await this.actividadRepository.findOne({ where: { id: actividadID }, relations: ['estudiantes'] });
+
+        const actividad = await this.actividadRepository.findOne({ where: { id: actividadID }, relations: ['estudiantes', 'resenas'] });
         if (!actividad) throw new NotFoundException('No se encontro la ectividad');
 
         if (![0, 1, 2].includes(estado)) {
