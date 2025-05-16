@@ -1,0 +1,66 @@
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ActividadEntity } from './actividad.entity';
+
+@Injectable()
+export class ActividadService {
+    constructor(
+        @InjectRepository(ActividadEntity)
+        private actividadRepository: Repository<ActividadEntity>,
+    ) {}
+
+
+
+    async crearActividad(data: Partial<ActividadEntity>): Promise<ActividadEntity> {
+  
+        //MANEJAR CORREO
+
+        const simbolosRegex = /[^a-zA-Z0-9\s]/;
+        if (!data.titulo || data.titulo.length < 15) {
+            throw new BadRequestException('El título debe tener al menos 15 caracteres');
+        }
+        if (simbolosRegex.test(data.titulo)) {
+            throw new BadRequestException('El título no puede contener símbolos');
+        }
+        const actividad = this.actividadRepository.create({...data, estado: 0 });
+        return this.actividadRepository.save(actividad);
+    }
+
+
+
+
+
+    async cambiarEstado(actividadID: number, estado: number): Promise<ActividadEntity> {
+        const actividad = await this.actividadRepository.findOne({ where: { id: actividadID }, relations: ['estudiantes'] });
+        if (!actividad) throw new NotFoundException('No se encontro la ectividad');
+
+        if (![0, 1, 2].includes(estado)) {
+            throw new BadRequestException('Se tiene un estado invalido');
+        }
+
+        if (estado === 1) {
+            if (actividad.estudiantes.length < Math.ceil(actividad.cupoMaximo * 0.8)) {
+                throw new BadRequestException('Hay un error: el 80% del cupo debe estar está lleno');
+            }
+        }
+
+
+
+
+
+
+        if (estado === 2) {
+            if (actividad.estudiantes.length < actividad.cupoMaximo) {
+                throw new BadRequestException('Error: no debe haber cupo disponible');
+            }
+        }
+
+        actividad.estado = estado;
+        return this.actividadRepository.save(actividad);
+    }
+
+    async findAllActividadesByDate(fecha: string): Promise<ActividadEntity[]> {
+        return this.actividadRepository.find({ where: { fecha } });
+    }
+}
