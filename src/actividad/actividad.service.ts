@@ -34,11 +34,16 @@ export class ActividadService {
     async cambiarEstado(actividadID: number, estado: number): Promise<ActividadEntity> {
 
         const actividad = await this.actividadRepository.findOne({ where: { id: actividadID }, relations: ['estudiantes', 'resenas'] });
-        if (!actividad) throw new NotFoundException('No se encontro la ectividad');
+        
+        if (!actividad) {
+            throw new NotFoundException('No se encontro la ectividad');
+        }
+
 
         if (![0, 1, 2].includes(estado)) {
             throw new BadRequestException('Se tiene un estado invalido');
         }
+        //0(abierta), 1(Cerrada), 2(Finalizada)
 
         if (estado === 1) {
             if (actividad.estudiantes.length < Math.ceil(actividad.cupoMaximo * 0.8)) {
@@ -46,6 +51,7 @@ export class ActividadService {
             }
         }
 
+        //Para que se de como finalizada en este caso me dice que la cantidad de estudiantes debe ser igial al cupo maximo 
         if (estado === 2) {
             if (actividad.estudiantes.length < actividad.cupoMaximo) {
                 throw new BadRequestException('Error: no debe haber cupo disponible');
