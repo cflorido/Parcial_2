@@ -1,5 +1,5 @@
-import { ActividadEntity } from 'src/actividad/actividad.entity';
-import { ResenaEntity } from 'src/resena/resena.entity';
+import { ActividadEntity } from '../actividad/actividad.entity';
+import { ResenaEntity } from '../resena/resena.entity';
 import { Entity, PrimaryGeneratedColumn, Column, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 
 @Entity()

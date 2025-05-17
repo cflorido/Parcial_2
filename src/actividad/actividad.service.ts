@@ -14,13 +14,13 @@ export class ActividadService {
 
 
         if (!data.titulo || data.titulo.length < 15) {
-            throw new BadRequestException('El título debe tener al menos 15 caracteres');
+            throw new BadRequestException('El titulo debe tener por lo menos 15 letras');
         }
 
         // Aqui no debe tener un titulo con simbolos AAAA
         const simbolosRegex = /[^a-zA-Z0-9\s]/;
         if (simbolosRegex.test(data.titulo)) {
-            throw new BadRequestException('El título no puede contener símbolos');
+            throw new BadRequestException('El titulo no puede contener simbolos');
         }
 
         //Decision de diseño: En este caso se decidio que el estado de la actividad se inicializa en 0

@@ -21,7 +21,7 @@ export class ResenaService {
         const actividad = await this.actividadRepository.findOne({ where: { id: actividadId }, relations: ['estudiantes', 'resenas'] });
     
         if (!actividad){
-            throw new NotFoundException('No se ha encontrado la actividad ');
+            throw new NotFoundException('No se ha encontrado la actividad');
         }
  
         if (actividad.estado !== 2) {
