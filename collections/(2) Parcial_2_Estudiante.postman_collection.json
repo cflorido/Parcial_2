@@ -1,0 +1,1107 @@
+{
+	"info": {
+		"_postman_id": "60156e7a-5694-472a-ad28-1a76769f87c0",
+		"name": "(2) Parcial_2_Estudiante",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44757146",
+		"_collection_link": "https://carol-9707375.postman.co/workspace/28a14636-1c59-4daa-8058-29ea22132203/collection/44757146-60156e7a-5694-472a-ad28-1a76769f87c0?action=share&source=collection_link&creator=44757146"
+	},
+	"item": [
+		{
+			"name": "Crear estudiante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"pm.globals.set(\"estudiante_id\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El correo es válido\", function () {\r",
+							"    pm.expect(data.correo).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El semestre está entre 1 y 10\", function () {\r",
+							"    pm.expect(data.semestre).to.be.within(1, 10);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"cedula\": 1029384756,\r\n  \"nombre\": \"Shakira Mebarak\",\r\n  \"correo\": \"shakira@musica.com\",\r\n  \"programa\": \"Música\",\r\n  \"semestre\": 7\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/estudiantes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"estudiantes"
+					]
+				},
+				"description": "Esta prueba crea un estudiante con datos válidos como nombre, correo, cédula y semestre. Se eligió este caso porque es necesario tener estudiantes creados antes de inscribirlos en actividades. Además, se validan reglas como el formato del correo y el rango permitido del semestre (1 a 10)."
+			},
+			"response": [
+				{
+					"name": "Crear Estudiante",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cedula\": 1029384756,\r\n  \"nombre\": \"Shakira Mebarak\",\r\n  \"correo\": \"shakira@musica.com\",\r\n  \"programa\": \"Música\",\r\n  \"semestre\": 7\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/estudiantes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"estudiantes"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"cedula\": 1029384756,\n    \"nombre\": \"Shakira Mebarak\",\n    \"correo\": \"shakira@musica.com\",\n    \"programa\": \"Música\",\n    \"semestre\": 7\n}"
+				}
+			]
+		},
+		{
+			"name": "Email inválido",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de error por correo inválido\", function () {\r",
+							"    pm.expect(data.message).to.include(\"correo invalido\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"cedula\": 1234567890,\r\n  \"nombre\": \"Shakira Mebarak\",\r\n  \"correo\": \"correo-invalido\",\r\n  \"programa\": \"Musica\",\r\n  \"semestre\": 6\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/estudiantes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"estudiantes"
+					]
+				},
+				"description": "Esta prueba intenta crear un estudiante con un correo que no tiene el formato correcto. Se eligió este caso para asegurar que el sistema valide bien los correos antes de aceptar un nuevo registro. Si el correo es inválido, el API debe responder con un error 400 y un mensaje claro indicando el problema."
+			},
+			"response": [
+				{
+					"name": "Email inválido",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/estudiantes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"estudiantes"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"se tiene un correo invalido\",\n    \"error\": \"Bad Request\",\n    \"statusCode\": 400\n}"
+				}
+			]
+		},
+		{
+			"name": "Buscar estudiante por ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La respuesta contiene los datos del estudiante\", function () {\r",
+							"    pm.expect(data).to.have.property(\"id\");\r",
+							"    pm.expect(data).to.have.property(\"nombre\");\r",
+							"    pm.expect(data).to.have.property(\"correo\");\r",
+							"    pm.expect(data).to.have.property(\"programa\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/estudiantes/{{estudiante_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"estudiantes",
+						"{{estudiante_id}}"
+					]
+				},
+				"description": "Esta prueba consulta un estudiante por su ID. Se eligió este caso porque es necesario poder recuperar la información de un estudiante para mostrarla en vistas de detalle o validarla antes de inscribirlo a actividades. El sistema debe devolver un objeto completo si el estudiante existe, junto con un código 200."
+			},
+			"response": [
+				{
+					"name": "Buscar estudiante por ID",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/estudiantes/{{estudiante_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"estudiantes",
+								"{{estudiante_id}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"cedula\": 1234567890,\n    \"nombre\": \"Shakira Mebarak\",\n    \"correo\": \"shakira@correo.com\",\n    \"programa\": \"Música\",\n    \"semestre\": 6,\n    \"actividades\": [],\n    \"resenas\": []\n}"
+				}
+			]
+		},
+		{
+			"name": "Estudiante no encontrado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de error por estudiante no encontrado\", function () {\r",
+							"    pm.expect(data.message).to.include(\"No se ha encontrado al estudiante\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/estudiantes/999",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"estudiantes",
+						"999"
+					]
+				},
+				"description": "Esta prueba intenta buscar un estudiante usando un ID que no existe en la base de datos. Se eligió este caso porque el sistema debe manejar adecuadamente búsquedas inválidas y responder con un error claro. Si el estudiante no existe, el API debe devolver un error 404 junto con un mensaje como \"No se ha encontrado al estudiante\""
+			},
+			"response": [
+				{
+					"name": "Estudiante no encontrado",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/estudiantes/00000000-0000-0000-0000-000000000000",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"estudiantes",
+								"00000000-0000-0000-0000-000000000000"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"No se ha encontrado al estudiante \",\n    \"error\": \"Not Found\",\n    \"statusCode\": 404\n}"
+				}
+			]
+		},
+		{
+			"name": "Inscribir estudiante  a actividad",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201 o 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de inscripción correcta\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Se ha incrito al estudiante\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/estudiantes/{{estudiante_id}}/inscribir/{{actividad_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"estudiantes",
+						"{{estudiante_id}}",
+						"inscribir",
+						"{{actividad_id}}"
+					]
+				},
+				"description": "En esta prueba se inscribe un estudiante en una actividad. Se eligió este caso porque es parte fundamental del proceso: sin estudiantes inscritos no se pueden cerrar ni finalizar actividades. Es importante validar que la inscripción funcione correctamente y que se respete el cupo y estado de la actividad."
+			},
+			"response": [
+				{
+					"name": "Inscribir estudiante a actividad",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/actividades/{{actividad_id}}/inscribir/{{estudiante_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades",
+								"{{actividad_id}}",
+								"inscribir",
+								"{{estudiante_id}}"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "Estudiante inscrito correctamente"
+				}
+			]
+		},
+		{
+			"name": "(pre) Crear actividad 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"pm.globals.set(\"actividad_id\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El estado inicial es 0\", function () {\r",
+							"    pm.expect(data.estado).to.eql(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El título coincide con el enviado\", function () {\r",
+							"    pm.expect(data.titulo).to.eql(\"Actividad 2 holaaa actividad\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"titulo\": \"Actividad 2 holaaa actividad\",\r\n  \"fecha\": \"2025-05-05\",\r\n  \"cupoMaximo\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/actividades",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"actividades"
+					]
+				},
+				"description": "En esta prueba se revisa que se pueda crear una actividad correctamente. Se usa un título válido, una fecha y un cupo máximo mayor a 0. Se eligió este caso porque es el primero que se debería probar para asegurarse de que el API esté funcionando bien desde el inicio. También se verifica que el estado de la actividad empiece en 0."
+			},
+			"response": [
+				{
+					"name": "Crear actividad correctamente",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"titulo\": \"Actividad de integracion estudiantil\",\r\n  \"fecha\": \"2025-06-01\",\r\n  \"cupoMaximo\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/actividades",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"titulo\": \"Actividad 2 holaaa actividad\",\n    \"fecha\": \"2025-05-05\",\n    \"cupoMaximo\": 10,\n    \"estado\": 0\n}"
+				}
+			]
+		},
+		{
+			"name": "(pre) Inscribir estudiante 1 a actividad 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201 o 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de inscripción correcta\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Se ha incrito al estudiante\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/estudiantes/{{estudiante_id}}/inscribir/{{actividad_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"estudiantes",
+						"{{estudiante_id}}",
+						"inscribir",
+						"{{actividad_id}}"
+					]
+				},
+				"description": "En esta prueba se inscribe un estudiante en una actividad. Se eligió este caso porque es parte fundamental del proceso: sin estudiantes inscritos no se pueden cerrar ni finalizar actividades. Es importante validar que la inscripción funcione correctamente y que se respete el cupo y estado de la actividad."
+			},
+			"response": [
+				{
+					"name": "Inscribir estudiante a actividad",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/actividades/{{actividad_id}}/inscribir/{{estudiante_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades",
+								"{{actividad_id}}",
+								"inscribir",
+								"{{estudiante_id}}"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "Estudiante inscrito correctamente"
+				}
+			]
+		},
+		{
+			"name": "Error - Inscribir estudiante ya inscrito",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de error: estudiante ya inscrito\", function () {\r",
+							"    pm.expect(data.message).to.include(\"El estudiante ya está inscrito en esta actividad\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/estudiantes/{{estudiante_id}}/inscribir/{{actividad_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"estudiantes",
+						"{{estudiante_id}}",
+						"inscribir",
+						"{{actividad_id}}"
+					]
+				},
+				"description": "Esta prueba intenta inscribir a un estudiante que ya está inscrito en la actividad. Se eligió este caso porque el sistema debe impedir inscripciones duplicadas y garantizar integridad en las relaciones. Al intentar inscribir al mismo estudiante dos veces, el API debe devolver un error 400 y un mensaje claro indicando que la inscripción no se puede repetir."
+			},
+			"response": [
+				{
+					"name": "Error - Inscribir estudiante ya inscrito",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/actividades/{{actividad_id}}/inscribir/{{estudiante_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades",
+								"{{actividad_id}}",
+								"inscribir",
+								"{{estudiante_id}}"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 400,\n    \"message\": \"El estudiante ya está inscrito en la actividad\",\n    \"error\": \"Bad Request\"\n}"
+				}
+			]
+		},
+		{
+			"name": "(pre) Crear estudiante 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"pm.globals.set(\"estudiante_id\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El correo es válido\", function () {\r",
+							"    pm.expect(data.correo).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El semestre está entre 1 y 10\", function () {\r",
+							"    pm.expect(data.semestre).to.be.within(1, 10);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"cedula\": 1029384756,\r\n  \"nombre\": \"Shakira Mebarak\",\r\n  \"correo\": \"shakira@musica.com\",\r\n  \"programa\": \"Música\",\r\n  \"semestre\": 7\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/estudiantes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"estudiantes"
+					]
+				},
+				"description": "Esta prueba crea un estudiante con datos válidos como nombre, correo, cédula y semestre. Se eligió este caso porque es necesario tener estudiantes creados antes de inscribirlos en actividades. Además, se validan reglas como el formato del correo y el rango permitido del semestre (1 a 10)."
+			},
+			"response": [
+				{
+					"name": "Crear Estudiante",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cedula\": 1029384756,\r\n  \"nombre\": \"Shakira Mebarak\",\r\n  \"correo\": \"shakira@musica.com\",\r\n  \"programa\": \"Música\",\r\n  \"semestre\": 7\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/estudiantes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"estudiantes"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"cedula\": 1029384756,\n    \"nombre\": \"Shakira Mebarak\",\n    \"correo\": \"shakira@musica.com\",\n    \"programa\": \"Música\",\n    \"semestre\": 7\n}"
+				}
+			]
+		},
+		{
+			"name": "(pre) Inscribir estudiante 2 a actividad 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201 o 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de inscripción correcta\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Se ha incrito al estudiante\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/estudiantes/{{estudiante_id}}/inscribir/{{actividad_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"estudiantes",
+						"{{estudiante_id}}",
+						"inscribir",
+						"{{actividad_id}}"
+					]
+				},
+				"description": "En esta prueba se inscribe un estudiante en una actividad. Se eligió este caso porque es parte fundamental del proceso: sin estudiantes inscritos no se pueden cerrar ni finalizar actividades. Es importante validar que la inscripción funcione correctamente y que se respete el cupo y estado de la actividad."
+			},
+			"response": [
+				{
+					"name": "Inscribir estudiante a actividad",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/actividades/{{actividad_id}}/inscribir/{{estudiante_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades",
+								"{{actividad_id}}",
+								"inscribir",
+								"{{estudiante_id}}"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "Estudiante inscrito correctamente"
+				}
+			]
+		},
+		{
+			"name": "Error - Cupo lleno al inscribir",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de error por cupo lleno\", function () {\r",
+							"    pm.expect(data.message).to.include(\"Sin cupos\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/estudiantes/{{estudiante_id}}/inscribir/{{actividad_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"estudiantes",
+						"{{estudiante_id}}",
+						"inscribir",
+						"{{actividad_id}}"
+					]
+				},
+				"description": "Esta prueba intenta inscribir un estudiante en una actividad que ya ha alcanzado su cupo máximo. Se eligió este caso para garantizar que el sistema no permita sobrepasar el límite de inscritos definido en cada actividad. Si se excede, el API debe retornar un error 400 con un mensaje que indique que no hay cupos disponibles."
+			},
+			"response": [
+				{
+					"name": "Error - Cupo lleno al inscribir",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/actividades/{{actividad_id}}/inscribir/{{estudiante_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades",
+								"{{actividad_id}}",
+								"inscribir",
+								"{{estudiante_id}}"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 400,\n    \"message\": \"La actividad ya alcanzó el cupo máximo\",\n    \"error\": \"Bad Request\"\n}"
+				}
+			]
+		},
+		{
+			"name": "(pre) Crear estudiante 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"pm.globals.set(\"estudiante_id\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El correo es válido\", function () {\r",
+							"    pm.expect(data.correo).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El semestre está entre 1 y 10\", function () {\r",
+							"    pm.expect(data.semestre).to.be.within(1, 10);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"cedula\": 1029384756,\r\n  \"nombre\": \"Shakira Mebarak\",\r\n  \"correo\": \"shakira@musica.com\",\r\n  \"programa\": \"Música\",\r\n  \"semestre\": 7\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/estudiantes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"estudiantes"
+					]
+				},
+				"description": "Esta prueba crea un estudiante con datos válidos como nombre, correo, cédula y semestre. Se eligió este caso porque es necesario tener estudiantes creados antes de inscribirlos en actividades. Además, se validan reglas como el formato del correo y el rango permitido del semestre (1 a 10)."
+			},
+			"response": [
+				{
+					"name": "Crear Estudiante",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cedula\": 1029384756,\r\n  \"nombre\": \"Shakira Mebarak\",\r\n  \"correo\": \"shakira@musica.com\",\r\n  \"programa\": \"Música\",\r\n  \"semestre\": 7\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/estudiantes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"estudiantes"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"cedula\": 1029384756,\n    \"nombre\": \"Shakira Mebarak\",\n    \"correo\": \"shakira@musica.com\",\n    \"programa\": \"Música\",\n    \"semestre\": 7\n}"
+				}
+			]
+		},
+		{
+			"name": "Error - Actividad cerrada o finalizada",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de error: actividad no disponible\", function () {\r",
+							"    pm.expect(data.message).to.include(\"Actividad no disponible\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/estudiantes/{{estudiante_id}}/inscribir/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"estudiantes",
+						"{{estudiante_id}}",
+						"inscribir",
+						"1"
+					]
+				},
+				"description": "Esta prueba intenta inscribir a un estudiante en una actividad que ya está cerrada o finalizada. Se eligió este caso para validar que el sistema impida inscripciones fuera de tiempo. Cuando el estado de la actividad es distinto de 0 (abierta), el API debe responder con un error 400 y un mensaje claro indicando que la actividad no está disponible."
+			},
+			"response": [
+				{
+					"name": "Error - Actividad cerrada o finalizada",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/actividades/{{actividad_id}}/inscribir/{{estudiante_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades",
+								"{{actividad_id}}",
+								"inscribir",
+								"{{estudiante_id}}"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 400,\n    \"message\": \"La actividad no está disponible para inscripción\",\n    \"error\": \"Bad Request\"\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

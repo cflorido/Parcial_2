@@ -112,7 +112,7 @@ describe('ResenaService', () => {
         calificacion: 2,
         fecha: '2025-06-13',
       })
-    ).rejects.toThrowError(new BadRequestException('La actividad ya finalizo'));
+    ).rejects.toThrowError(new BadRequestException('La actividad no ha finalizado'));
   });
 
   it('deberia lanzar error si el estudiante no estaba inscrito', async () => {

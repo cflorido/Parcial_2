@@ -1,0 +1,919 @@
+{
+	"info": {
+		"_postman_id": "0aa310da-cc61-49be-b3ba-2540258f4663",
+		"name": "(3) Parcial_2_Resena",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44757146",
+		"_collection_link": "https://carol-9707375.postman.co/workspace/28a14636-1c59-4daa-8058-29ea22132203/collection/44757146-0aa310da-cc61-49be-b3ba-2540258f4663?action=share&source=collection_link&creator=44757146"
+	},
+	"item": [
+		{
+			"name": "(pre) Crear estudiante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"pm.globals.set(\"estudiante_id\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El correo es válido\", function () {\r",
+							"    pm.expect(data.correo).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El semestre está entre 1 y 10\", function () {\r",
+							"    pm.expect(data.semestre).to.be.within(1, 10);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"cedula\": 1029384756,\r\n  \"nombre\": \"Shakira Mebarak\",\r\n  \"correo\": \"shakira@musica.com\",\r\n  \"programa\": \"Música\",\r\n  \"semestre\": 7\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/estudiantes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"estudiantes"
+					]
+				},
+				"description": "Esta prueba crea un estudiante con datos válidos como nombre, correo, cédula y semestre. Se eligió este caso porque es necesario tener estudiantes creados antes de inscribirlos en actividades. Además, se validan reglas como el formato del correo y el rango permitido del semestre (1 a 10)."
+			},
+			"response": [
+				{
+					"name": "Crear Estudiante",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cedula\": 1029384756,\r\n  \"nombre\": \"Shakira Mebarak\",\r\n  \"correo\": \"shakira@musica.com\",\r\n  \"programa\": \"Música\",\r\n  \"semestre\": 7\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/estudiantes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"estudiantes"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"cedula\": 1029384756,\n    \"nombre\": \"Shakira Mebarak\",\n    \"correo\": \"shakira@musica.com\",\n    \"programa\": \"Música\",\n    \"semestre\": 7\n}"
+				}
+			]
+		},
+		{
+			"name": "(pre) Crear actividad correctamente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"pm.globals.set(\"actividad_id\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El estado inicial es 0\", function () {\r",
+							"    pm.expect(data.estado).to.eql(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El título coincide con el enviado\", function () {\r",
+							"    pm.expect(data.titulo).to.eql(\"Actividad super divertida\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"titulo\": \"Actividad super divertida\",\r\n  \"fecha\": \"2025-05-05\",\r\n  \"cupoMaximo\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/actividades",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"actividades"
+					]
+				},
+				"description": "En esta prueba se revisa que se pueda crear una actividad correctamente. Se usa un título válido, una fecha y un cupo máximo mayor a 0. Se eligió este caso porque es el primero que se debería probar para asegurarse de que el API esté funcionando bien desde el inicio. También se verifica que el estado de la actividad empiece en 0."
+			},
+			"response": [
+				{
+					"name": "Crear actividad correctamente",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"titulo\": \"Actividad de integracion estudiantil\",\r\n  \"fecha\": \"2025-06-01\",\r\n  \"cupoMaximo\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/actividades",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"titulo\": \"Actividad super divertida\",\n    \"fecha\": \"2025-05-05\",\n    \"cupoMaximo\": 10,\n    \"estado\": 0\n}"
+				}
+			]
+		},
+		{
+			"name": "(pre) Inscribir estudiante a actividad",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201 o 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de inscripción correcta\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Se ha incrito al estudiante\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/estudiantes/{{estudiante_id}}/inscribir/{{actividad_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"estudiantes",
+						"{{estudiante_id}}",
+						"inscribir",
+						"{{actividad_id}}"
+					]
+				},
+				"description": "En esta prueba se inscribe un estudiante en una actividad. Se eligió este caso porque es parte fundamental del proceso: sin estudiantes inscritos no se pueden cerrar ni finalizar actividades. Es importante validar que la inscripción funcione correctamente y que se respete el cupo y estado de la actividad."
+			},
+			"response": [
+				{
+					"name": "Inscribir estudiante a actividad",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/actividades/{{actividad_id}}/inscribir/{{estudiante_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades",
+								"{{actividad_id}}",
+								"inscribir",
+								"{{estudiante_id}}"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "Estudiante inscrito correctamente"
+				}
+			]
+		},
+		{
+			"name": "Actividad no ha finalizado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de error: actividad no ha finalizado\", function () {\r",
+							"    pm.expect(data.message).to.include(\"La actividad no ha finalizado\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"comentario\": \"Muy buena\",\r\n  \"calificacion\": 4,\r\n  \"fecha\": \"2025-07-02\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/resenas/{{actividad_id}}/estudiante/{{estudiante_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"resenas",
+						"{{actividad_id}}",
+						"estudiante",
+						"{{estudiante_id}}"
+					]
+				},
+				"description": "Esta prueba intenta agregar una reseña a una actividad que todavía no ha finalizado (estado diferente de 2). Se eligió este caso para validar que el sistema no permita calificar actividades en curso o cerradas. Según la lógica del sistema, solo las actividades finalizadas pueden recibir reseñas. Si se intenta antes, el API debe devolver un error 400 con un mensaje claro que indique que la actividad no está en estado finalizado."
+			},
+			"response": [
+				{
+					"name": "Actividad no ha finalizado",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"comentario\": \"Muy buena\",\r\n  \"calificacion\": 4,\r\n  \"fecha\": \"2025-07-02\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/resenas/{{resena_id}}/estudiante/{{estudiante_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"resenas",
+								"{{resena_id}}",
+								"estudiante",
+								"{{estudiante_id}}"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 400,\n    \"message\": \"La actividad ya finalizo\",\n    \"error\": \"Bad Request\"\n}"
+				}
+			]
+		},
+		{
+			"name": "(pre) Cambiar estado a Finalizada",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El estado fue cambiado correctamente a 2 (finalizada)\", function () {\r",
+							"    pm.expect(data.estado).to.eql(2);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La actividad mantiene su ID\", function () {\r",
+							"    pm.expect(data).to.have.property(\"id\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"estado\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/actividades/{{actividad_id}}/estado",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"actividades",
+						"{{actividad_id}}",
+						"estado"
+					]
+				},
+				"description": "En esta prueba se cambia el estado de una actividad a finalizada (estado 2). Se eligió este caso porque es necesario garantizar que una actividad solo puede finalizarse si se ha llenado completamente, es decir, cuando todos los cupos están ocupados. Esto asegura que la actividad tuvo participación total antes de su cierre definitivo."
+			},
+			"response": [
+				{
+					"name": "Cambiar estado a Finalizada (estado: 2)",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"estado\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/actividades/{{actividad_id}}/estado",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades",
+								"{{actividad_id}}",
+								"estado"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"id\": 1,\r\n    \"titulo\": \"Actividad de integracion estudiantil\",\r\n    \"fecha\": \"2025-06-01\",\r\n    \"cupoMaximo\": 1,\r\n    \"estado\": 2,\r\n    \"estudiantes\": [\r\n        {\r\n            \"id\": 1,\r\n            \"cedula\": 1029384756,\r\n            \"nombre\": \"Shakira Mebarak\",\r\n            \"correo\": \"shakira@musica.com\",\r\n            \"programa\": \"Música\",\r\n            \"semestre\": 7\r\n        }\r\n    ],\r\n    \"resenas\": []\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Agregar reseña",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 201 o 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Reseña contiene comentario y calificación\", function () {\r",
+							"    pm.expect(data).to.have.property(\"comentario\");\r",
+							"    pm.expect(data).to.have.property(\"calificacion\");\r",
+							"    pm.expect(data.calificacion).to.be.within(0, 5);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"comentario\": \"Holaaa estoy reseñando\",\r\n  \"calificacion\": 5,\r\n  \"fecha\": \"2025-05-05\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/resenas/{{actividad_id}}/estudiante/{{estudiante_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"resenas",
+						"{{actividad_id}}",
+						"estudiante",
+						"{{estudiante_id}}"
+					]
+				},
+				"description": "Esta prueba permite agregar una reseña a una actividad por parte de un estudiante. Se eligió este caso porque es necesario asegurar que las reseñas solo se pueden realizar si el estudiante participó y si la actividad ya fue finalizada (estado 2). El sistema debe guardar el comentario y la calificación si todo es válido."
+			},
+			"response": [
+				{
+					"name": "Agregar reseña",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"comentario\": \"Excelente actividad, aprendí bastante.\",\r\n  \"calificacion\": 5,\r\n  \"fecha\": \"2025-07-02\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/resenas/{{actividad_id}}/estudiante/{{estudiante_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"resenas",
+								"{{actividad_id}}",
+								"estudiante",
+								"{{estudiante_id}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"id\": 1,\r\n    \"comentario\": \"Holaaa estoy reseñando\",\r\n    \"calificacion\": 5,\r\n    \"fecha\": \"2025-05-05\",\r\n    \"estudiante\": {\r\n        \"id\": 1,\r\n        \"cedula\": 1029384756,\r\n        \"nombre\": \"Shakira Mebarak\",\r\n        \"correo\": \"shakira@musica.com\",\r\n        \"programa\": \"Música\",\r\n        \"semestre\": 7\r\n    },\r\n    \"actividad\": {\r\n        \"id\": 1,\r\n        \"titulo\": \"Actividad de integracion estudiantil\",\r\n        \"fecha\": \"2025-06-01\",\r\n        \"cupoMaximo\": 1,\r\n        \"estado\": 0,\r\n        \"estudiantes\": [\r\n            {\r\n                \"id\": 1,\r\n                \"cedula\": 1029384756,\r\n                \"nombre\": \"Shakira Mebarak\",\r\n                \"correo\": \"shakira@musica.com\",\r\n                \"programa\": \"Música\",\r\n                \"semestre\": 7\r\n            }\r\n        ],\r\n        \"resenas\": []\r\n    }\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Actividad no encontrada",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de error: actividad no encontrada\", function () {\r",
+							"    pm.expect(data.message).to.include(\"No se ha encontrado la actividad\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"comentario\": \"Muy buena\",\r\n  \"calificacion\": 4,\r\n  \"fecha\": \"2025-07-02\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/resenas/999/estudiante/{{estudiante_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"resenas",
+						"999",
+						"estudiante",
+						"{{estudiante_id}}"
+					]
+				},
+				"description": "Esta prueba intenta agregar una reseña a una actividad que no existe. Se eligió este caso para validar que el sistema maneje correctamente las referencias inválidas a entidades. El API debe responder con un error 404 cuando el ID de actividad no corresponde a ningún registro en la base de datos."
+			},
+			"response": [
+				{
+					"name": "Actividad no encontrada",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"comentario\": \"Muy buena\",\r\n  \"calificacion\": 4,\r\n  \"fecha\": \"2025-07-02\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/resenas/00000000-0000-0000-0000-000000000000/estudiante/{{estudiante_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"resenas",
+								"00000000-0000-0000-0000-000000000000",
+								"estudiante",
+								"{{estudiante_id}}"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 404,\n    \"message\": \"No se ha encontrado la actividad\",\n    \"error\": \"Not Found\"\n}"
+				}
+			]
+		},
+		{
+			"name": "(pre) Crear estudiante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"pm.globals.set(\"estudiante_id\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El correo es válido\", function () {\r",
+							"    pm.expect(data.correo).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El semestre está entre 1 y 10\", function () {\r",
+							"    pm.expect(data.semestre).to.be.within(1, 10);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"cedula\": 1029384756,\r\n  \"nombre\": \"Shakira Mebarak\",\r\n  \"correo\": \"shakira@musica.com\",\r\n  \"programa\": \"Música\",\r\n  \"semestre\": 7\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/estudiantes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"estudiantes"
+					]
+				},
+				"description": "Esta prueba crea un estudiante con datos válidos como nombre, correo, cédula y semestre. Se eligió este caso porque es necesario tener estudiantes creados antes de inscribirlos en actividades. Además, se validan reglas como el formato del correo y el rango permitido del semestre (1 a 10)."
+			},
+			"response": [
+				{
+					"name": "Crear Estudiante",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cedula\": 1029384756,\r\n  \"nombre\": \"Shakira Mebarak\",\r\n  \"correo\": \"shakira@musica.com\",\r\n  \"programa\": \"Música\",\r\n  \"semestre\": 7\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/estudiantes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"estudiantes"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"cedula\": 1029384756,\n    \"nombre\": \"Shakira Mebarak\",\n    \"correo\": \"shakira@musica.com\",\n    \"programa\": \"Música\",\n    \"semestre\": 7\n}"
+				}
+			]
+		},
+		{
+			"name": "Estudiante no inscrito en la actividad",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de error: estudiante no inscrito\", function () {\r",
+							"    pm.expect(data.message).to.include(\"El estudiante no estaba inscrito\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"comentario\": \"No participé pero opino\",\r\n  \"calificacion\": 2,\r\n  \"fecha\": \"2025-07-02\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/resenas/{{actividad_id}}/estudiante/{{estudiante_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"resenas",
+						"{{actividad_id}}",
+						"estudiante",
+						"{{estudiante_id}}"
+					]
+				},
+				"description": "Esta prueba intenta agregar una reseña con un estudiante que no participó en la actividad. Se eligió este caso para validar que el sistema impida emitir reseñas por personas no autorizadas. El API debe devolver un error 400 indicando que el estudiante no estaba inscrito en la actividad correspondiente."
+			},
+			"response": [
+				{
+					"name": "Estudiante no inscrito en la actividad",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"comentario\": \"No participé pero opino\",\r\n  \"calificacion\": 2,\r\n  \"fecha\": \"2025-07-02\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/resenas/{{actividad_id}}/estudiante/{{estudiante_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"resenas",
+								"{{actividad_id}}",
+								"estudiante",
+								"{{estudiante_id}}"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 400,\n    \"message\": \"El estudiante no estaba inscrito\",\n    \"error\": \"Bad Request\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Estudiante no encontrado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de error: estudiante no inscrito\", function () {\r",
+							"    pm.expect(data.message).to.include(\"El estudiante no estaba inscrito\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"comentario\": \"Todo bien\",\r\n  \"calificacion\": 3,\r\n  \"fecha\": \"2025-07-02\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/resenas/{{actividad_id}}/estudiante/999",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"resenas",
+						"{{actividad_id}}",
+						"estudiante",
+						"999"
+					]
+				},
+				"description": "Esta prueba intenta agregar una reseña usando un ID de estudiante que no existe. Debido a cómo está implementada la lógica del sistema, primero se verifica si el estudiante está inscrito en la actividad. Como no lo está (porque no existe), el API responde con un error 400"
+			},
+			"response": [
+				{
+					"name": "Estudiante no encontrado",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"comentario\": \"Todo bien\",\r\n  \"calificacion\": 3,\r\n  \"fecha\": \"2025-07-02\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/resenas/{{actividad_id}}/estudiante/00000000-0000-0000-0000-000000000000",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"resenas",
+								"{{actividad_id}}",
+								"estudiante",
+								"00000000-0000-0000-0000-000000000000"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"El estudiante no estaba inscrito\",\n    \"error\": \"Bad Request\",\n    \"statusCode\": 400\n}"
+				}
+			]
+		}
+	]
+}

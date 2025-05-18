@@ -138,7 +138,7 @@ describe('EstudianteService', () => {
       resenas: [],
     });
 
-    await expect(service.inscribirseActividad(estudiante.id, actividad.id)).rejects.toThrow('sin cupos');
+    await expect(service.inscribirseActividad(estudiante.id, actividad.id)).rejects.toThrow('Sin cupos');
   });
 
   it('inscribirseActividad deberia notificar si la actividad no esta abierta', async () => {
@@ -161,7 +161,7 @@ describe('EstudianteService', () => {
       resenas: [],
     });
 
-    await expect(service.inscribirseActividad(estudiante.id, actividad.id)).rejects.toThrow('actividad no disponible');
+    await expect(service.inscribirseActividad(estudiante.id, actividad.id)).rejects.toThrow('Actividad no disponible');
   });
 
   it('inscribirseActividad deberia notificar si el estudiante ya esta inscrito', async () => {
@@ -184,6 +184,6 @@ describe('EstudianteService', () => {
       resenas: [],
     });
 
-    await expect(service.inscribirseActividad(estudiante.id, actividad.id)).rejects.toThrow('El estudiante no se puede incribir');
+    await expect(service.inscribirseActividad(estudiante.id, actividad.id)).rejects.toThrow('El estudiante ya está inscrito en esta actividad');
   });
 });

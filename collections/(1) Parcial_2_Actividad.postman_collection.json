@@ -1,0 +1,1193 @@
+{
+	"info": {
+		"_postman_id": "93163904-1173-4cae-a725-beb04d92bf26",
+		"name": "(1) Parcial_2_Actividad",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44757146",
+		"_collection_link": "https://carol-9707375.postman.co/workspace/28a14636-1c59-4daa-8058-29ea22132203/collection/44757146-93163904-1173-4cae-a725-beb04d92bf26?action=share&source=collection_link&creator=44757146"
+	},
+	"item": [
+		{
+			"name": "Crear actividad correctamente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"pm.globals.set(\"actividad_id\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El estado inicial es 0\", function () {\r",
+							"    pm.expect(data.estado).to.eql(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El título coincide con el enviado\", function () {\r",
+							"    pm.expect(data.titulo).to.eql(\"Actividad ejemplo\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"titulo\": \"Actividad ejemplo\",\r\n  \"fecha\": \"2025-05-05\",\r\n  \"cupoMaximo\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/actividades",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"actividades"
+					]
+				},
+				"description": "En esta prueba se revisa que se pueda crear una actividad correctamente. Se usa un título válido, una fecha y un cupo máximo mayor a 0. Se eligió este caso porque es el primero que se debería probar para asegurarse de que el API esté funcionando bien desde el inicio. También se verifica que el estado de la actividad empiece en 0."
+			},
+			"response": [
+				{
+					"name": "Crear actividad correctamente",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"titulo\": \"Actividad de integracion estudiantil\",\r\n  \"fecha\": \"2025-06-01\",\r\n  \"cupoMaximo\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/actividades",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"titulo\": \"Actividad de ejemplo\",\n    \"fecha\": \"2025-06-01\",\n    \"cupoMaximo\": 10,\n    \"estado\": 0\n}"
+				}
+			]
+		},
+		{
+			"name": "(pre) Crear estudiante 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"pm.globals.set(\"estudiante_id\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El correo es válido\", function () {\r",
+							"    pm.expect(data.correo).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El semestre está entre 1 y 10\", function () {\r",
+							"    pm.expect(data.semestre).to.be.within(1, 10);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"cedula\": 1029384756,\r\n  \"nombre\": \"Shakira Mebarak\",\r\n  \"correo\": \"shakira@musica.com\",\r\n  \"programa\": \"Música\",\r\n  \"semestre\": 7\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/estudiantes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"estudiantes"
+					]
+				},
+				"description": "Esta prueba crea un estudiante con datos válidos como nombre, correo, cédula y semestre. Se eligió este caso porque es necesario tener estudiantes creados antes de inscribirlos en actividades. Además, se validan reglas como el formato del correo y el rango permitido del semestre (1 a 10)."
+			},
+			"response": [
+				{
+					"name": "Crear Estudiante",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cedula\": 1029384756,\r\n  \"nombre\": \"Shakira Mebarak\",\r\n  \"correo\": \"shakira@musica.com\",\r\n  \"programa\": \"Música\",\r\n  \"semestre\": 7\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/estudiantes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"estudiantes"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"cedula\": 1029384756,\n    \"nombre\": \"Shakira Mebarak\",\n    \"correo\": \"shakira@musica.com\",\n    \"programa\": \"Música\",\n    \"semestre\": 7\n}"
+				}
+			]
+		},
+		{
+			"name": "(pre) Inscribir estudiante 1 a actividad",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201 o 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de inscripción correcta\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Se ha incrito al estudiante\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/estudiantes/{{estudiante_id}}/inscribir/{{actividad_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"estudiantes",
+						"{{estudiante_id}}",
+						"inscribir",
+						"{{actividad_id}}"
+					]
+				},
+				"description": "En esta prueba se inscribe un estudiante en una actividad. Se eligió este caso porque es parte fundamental del proceso: sin estudiantes inscritos no se pueden cerrar ni finalizar actividades. Es importante validar que la inscripción funcione correctamente y que se respete el cupo y estado de la actividad."
+			},
+			"response": [
+				{
+					"name": "Inscribir estudiante a actividad",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/actividades/{{actividad_id}}/inscribir/{{estudiante_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades",
+								"{{actividad_id}}",
+								"inscribir",
+								"{{estudiante_id}}"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "Estudiante inscrito correctamente"
+				}
+			]
+		},
+		{
+			"name": "Cambiar estado a Cerrada (estado: 1)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El estado fue cambiado correctamente a 1\", function () {\r",
+							"    pm.expect(data.estado).to.eql(1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La actividad sigue teniendo su id\", function () {\r",
+							"    pm.expect(data).to.have.property(\"id\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"estado\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/actividades/{{actividad_id}}/estado",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"actividades",
+						"{{actividad_id}}",
+						"estado"
+					]
+				},
+				"description": "En esta prueba se cambia el estado de una actividad a cerrada (estado 1). Se eligió este caso porque representa una regla de negocio importante: una actividad solo puede cerrarse si al menos el 80% del cupo está ocupado. Esto permite asegurar que la actividad tiene suficiente participación antes de ser bloqueada para nuevas inscripciones."
+			},
+			"response": [
+				{
+					"name": "Cambiar estado a Cerrada (estado: 1)",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"estado\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/actividades/{{actividad_id}}/estado",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades",
+								"{{actividad_id}}",
+								"estado"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"id\": 1,\r\n    \"titulo\": \"Actividad de integracion estudiantil\",\r\n    \"fecha\": \"2025-06-01\",\r\n    \"cupoMaximo\": 1,\r\n    \"estado\": 1,\r\n    \"estudiantes\": [\r\n        {\r\n            \"id\": 1,\r\n            \"cedula\": 1029384756,\r\n            \"nombre\": \"Shakira Mebarak\",\r\n            \"correo\": \"shakira@musica.com\",\r\n            \"programa\": \"Música\",\r\n            \"semestre\": 7\r\n        }\r\n    ],\r\n    \"resenas\": []\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Cambiar estado a Finalizada (estado: 2)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El estado fue cambiado correctamente a 2 (finalizada)\", function () {\r",
+							"    pm.expect(data.estado).to.eql(2);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La actividad mantiene su ID\", function () {\r",
+							"    pm.expect(data).to.have.property(\"id\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"estado\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/actividades/{{actividad_id}}/estado",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"actividades",
+						"{{actividad_id}}",
+						"estado"
+					]
+				},
+				"description": "En esta prueba se cambia el estado de una actividad a finalizada (estado 2). Se eligió este caso porque es necesario garantizar que una actividad solo puede finalizarse si se ha llenado completamente, es decir, cuando todos los cupos están ocupados. Esto asegura que la actividad tuvo participación total antes de su cierre definitivo."
+			},
+			"response": [
+				{
+					"name": "Cambiar estado a Finalizada (estado: 2)",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"estado\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/actividades/{{actividad_id}}/estado",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades",
+								"{{actividad_id}}",
+								"estado"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"id\": 1,\r\n    \"titulo\": \"Actividad de integracion estudiantil\",\r\n    \"fecha\": \"2025-06-01\",\r\n    \"cupoMaximo\": 1,\r\n    \"estado\": 2,\r\n    \"estudiantes\": [\r\n        {\r\n            \"id\": 1,\r\n            \"cedula\": 1029384756,\r\n            \"nombre\": \"Shakira Mebarak\",\r\n            \"correo\": \"shakira@musica.com\",\r\n            \"programa\": \"Música\",\r\n            \"semestre\": 7\r\n        }\r\n    ],\r\n    \"resenas\": []\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Buscar actividades por fecha",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"La respuesta es un arreglo\", function () {\r",
+							"    pm.expect(data).to.be.an(\"array\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Todas las actividades son de la fecha buscada\", function () {\r",
+							"    data.forEach(function (actividad) {\r",
+							"        pm.expect(actividad.fecha).to.eql(\"2025-06-01\");\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/actividades?fecha=2025-06-01",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"actividades"
+					],
+					"query": [
+						{
+							"key": "fecha",
+							"value": "2025-06-01"
+						}
+					]
+				},
+				"description": "En esta prueba se consultan todas las actividades registradas en una fecha específica usando un parámetro fecha. Se eligió este caso porque permite a los usuarios o administradores filtrar actividades por día, lo cual es útil para visualizar eventos programados. Se valida que la respuesta sea un arreglo y que todas las actividades correspondan a la fecha solicitada."
+			},
+			"response": [
+				{
+					"name": "Buscar actividades por fecha",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/actividades?fecha=2025-07-01",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades"
+							],
+							"query": [
+								{
+									"key": "fecha",
+									"value": "2025-07-01"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "[\r\n    {\r\n        \"id\": 1,\r\n        \"titulo\": \"Actividad de integracion estudiantil\",\r\n        \"fecha\": \"2025-06-01\",\r\n        \"cupoMaximo\": 1,\r\n        \"estado\": 2\r\n    }\r\n]"
+				}
+			]
+		},
+		{
+			"name": "Título corto al crear actividad",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de error por título corto\", function () {\r",
+							"    pm.expect(data.message).to.include(\"El titulo debe tener por lo menos 15 letras\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"titulo\": \"corto\",\r\n  \"fecha\": \"2025-07-01\",\r\n  \"cupoMaximo\": 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/actividades",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"actividades"
+					]
+				},
+				"description": "Esta prueba intenta crear una actividad con un título muy corto. Se eligió este caso porque es importante validar que el API aplique correctamente las reglas de validación. En este caso, si el título tiene menos de 15 caracteres, debe retornar un error 400 con un mensaje claro que explique la razón del fallo."
+			},
+			"response": [
+				{
+					"name": "Título corto al crear actividad",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"titulo\": \"Muy corto\",\r\n  \"fecha\": \"2025-07-01\",\r\n  \"cupoMaximo\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/actividades",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"message\": \"El titulo debe tener por lo menos 15 letras\",\r\n    \"error\": \"Bad Request\",\r\n    \"statusCode\": 400\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Título con símbolos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de error por símbolos en el título\", function () {\r",
+							"    pm.expect(data.message).to.include(\"El titulo no puede contener simbolos\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"titulo\": \"CAAo@@IFOEIFEOIFJROJROEFJOdede\",\r\n  \"fecha\": \"2025-07-01\",\r\n  \"cupoMaximo\": 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/actividades",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"actividades"
+					]
+				},
+				"description": "Esta prueba intenta crear una actividad con un título que contiene símbolos especiales. Se eligió este caso para asegurar que el sistema cumpla con las validaciones definidas, donde los títulos solo pueden contener letras, números y espacios. Si se usan símbolos, el API debe responder con un error 400 y un mensaje claro indicando que no se permiten."
+			},
+			"response": [
+				{
+					"name": "Título con símbolos",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"titulo\": \"Curso@@Especial\",\r\n  \"fecha\": \"2025-07-01\",\r\n  \"cupoMaximo\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/actividades",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"El titulo no puede contener simbolos\",\n    \"error\": \"Bad Request\",\n    \"statusCode\": 400\n}"
+				}
+			]
+		},
+		{
+			"name": "Error - Actividad no encontrada al cambiar estado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de error: actividad no encontrada\", function () {\r",
+							"    pm.expect(data.message).to.include(\"No se encontro la ectividad\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"estado\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/actividades/9999/estado",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"actividades",
+						"9999",
+						"estado"
+					]
+				},
+				"description": "Esta prueba intenta cambiar el estado de una actividad que no existe. Se eligió este caso porque es importante que el sistema maneje correctamente los errores cuando se usa un ID inválido. El API debe responder con un error 400 y un mensaje claro que indique que la actividad no fue encontrada."
+			},
+			"response": [
+				{
+					"name": "Error - Actividad no encontrada al cambiar estado",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"estado\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/actividades/00000000-0000-0000-0000-000000000000/estado",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades",
+								"00000000-0000-0000-0000-000000000000",
+								"estado"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"No se encontro la ectividad\",\n    \"error\": \"Not Found\",\n    \"statusCode\": 404\n}"
+				}
+			]
+		},
+		{
+			"name": "Estado inválido",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de error por estado inválido\", function () {\r",
+							"    pm.expect(data.message).to.include(\"estado invalido\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"estado\": 8\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/actividades/{{actividad_id}}/estado",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"actividades",
+						"{{actividad_id}}",
+						"estado"
+					]
+				},
+				"description": "Esta prueba intenta cambiar el estado de una actividad con un valor no permitido. Se eligió este caso para verificar que el sistema valide correctamente los valores esperados (0: abierta, 1: cerrada, 2: finalizada). Al enviar un número diferente, el API debe responder con un error 400 y un mensaje que indique que el estado es inválido."
+			},
+			"response": [
+				{
+					"name": "Estado inválido",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"estado\": 8\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/actividades/{{actividad_id}}/estado",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades",
+								"{{actividad_id}}",
+								"estado"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Se tiene un estado invalido\",\n    \"error\": \"Bad Request\",\n    \"statusCode\": 400\n}"
+				}
+			]
+		},
+		{
+			"name": "Crear actividad 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"pm.globals.set(\"actividad_id\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El estado inicial es 0\", function () {\r",
+							"    pm.expect(data.estado).to.eql(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"El título coincide con el enviado\", function () {\r",
+							"    pm.expect(data.titulo).to.eql(\"Actividad 2 holaaa actividad\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"titulo\": \"Actividad 2 holaaa actividad\",\r\n  \"fecha\": \"2025-05-05\",\r\n  \"cupoMaximo\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/actividades",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"actividades"
+					]
+				},
+				"description": "En esta prueba se revisa que se pueda crear una actividad correctamente. Se usa un título válido, una fecha y un cupo máximo mayor a 0. Se eligió este caso porque es el primero que se debería probar para asegurarse de que el API esté funcionando bien desde el inicio. También se verifica que el estado de la actividad empiece en 0."
+			},
+			"response": [
+				{
+					"name": "Crear actividad correctamente",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"titulo\": \"Actividad de integracion estudiantil\",\r\n  \"fecha\": \"2025-06-01\",\r\n  \"cupoMaximo\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/actividades",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"titulo\": \"Actividad 2 holaaa actividad\",\n    \"fecha\": \"2025-05-05\",\n    \"cupoMaximo\": 10,\n    \"estado\": 0\n}"
+				}
+			]
+		},
+		{
+			"name": "Estado 1 sin 80% del cupo lleno",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de error por cupo insuficiente\", function () {\r",
+							"    pm.expect(data.message).to.include(\"el 80% del cupo debe estar está lleno\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"estado\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/actividades/{{actividad_id}}/estado",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"actividades",
+						"{{actividad_id}}",
+						"estado"
+					]
+				},
+				"description": "Esta prueba intenta cerrar una actividad cuando aún no se ha cumplido con el 80% del cupo lleno. Se eligió este caso para validar que el sistema aplique correctamente las reglas de negocio. Si no hay suficientes estudiantes inscritos, el cambio de estado debe fallar con un error 400 y un mensaje claro."
+			},
+			"response": [
+				{
+					"name": "Estado 1 sin 80% del cupo lleno",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"estado\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/actividades/{{actividad_id}}/estado",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades",
+								"{{actividad_id}}",
+								"estado"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Hay un error: el 80% del cupo debe estar está lleno\",\n    \"error\": \"Bad Request\",\n    \"statusCode\": 400\n}"
+				}
+			]
+		},
+		{
+			"name": "Estado 2 sin cupo lleno",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mensaje de error por cupo incompleto\", function () {\r",
+							"    pm.expect(data.message).to.include(\"no debe haber cupo disponible\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"estado\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/actividades/{{actividad_id}}/estado",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"actividades",
+						"{{actividad_id}}",
+						"estado"
+					]
+				},
+				"description": "Esta prueba intenta finalizar una actividad cuando todavía no se ha llenado completamente. Se eligió este caso para verificar que el sistema impida cerrar actividades que aún tienen cupos disponibles. El API debe responder con un error 400 y un mensaje claro indicando que no se puede finalizar sin cumplir con el cupo total."
+			},
+			"response": [
+				{
+					"name": "Estado 2 sin cupo lleno",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"estado\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/actividades/{{actividad_id}}/estado",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"actividades",
+								"{{actividad_id}}",
+								"estado"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Error: no debe haber cupo disponible\",\n    \"error\": \"Bad Request\",\n    \"statusCode\": 400\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "{{baseUrl}}",
+			"value": "http://localhost:3000/api/v1",
+			"type": "string"
+		}
+	]
+}

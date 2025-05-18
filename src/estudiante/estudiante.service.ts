@@ -43,29 +43,41 @@ export class EstudianteService {
     }
 
     async inscribirseActividad(estudianteID: number, actividadID: number): Promise<string> {
+        const estudiante = await this.estudianteRepository.findOne({where: { id: estudianteID }, relations: ['actividades'],});
+       
+        if (!estudiante) throw new NotFoundException('No se encontró el estudiante');
 
-        //----------------------------------
-        const estudiante = await this.estudianteRepository.findOne({ where: { id: estudianteID }, relations: ['actividades'] });
-        if (!estudiante) throw new NotFoundException('no se encontro el estudiante ');
-
-        const actividad = await this.actividadRepository.findOne({ where: { id: actividadID }, relations: ['estudiantes'] });
-        if (!actividad) throw new NotFoundException('no se encontro la actividad');
-
-        //----------------------------------
-        if (actividad.estudiantes.length >= actividad.cupoMaximo) {
-            throw new BadRequestException('sin cupos');
-        }
-        if (actividad.estado !== 0) {
-            throw new BadRequestException('actividad no disponible');
-        }
-        if (actividad.estudiantes.some(estudiante  => estudiante.id === estudianteID)) {
-            throw new BadRequestException('El estudiante no se puede incribir');
-        }
-
+        const actividad = await this.actividadRepository.findOne({ where: { id: actividadID }, });
         
+        if (!actividad) throw new NotFoundException('No se encontró la actividad');
 
-        actividad.estudiantes.push(estudiante);
-        await this.actividadRepository.save(actividad);
+        if (actividad.estado !== 0) {
+            throw new BadRequestException('Actividad no disponible');
+        }
+
+    
+        const inscritos = estudiante.actividades.filter(a => a.id === actividad.id).length;
+
+        const totalInscritos = await this.estudianteRepository
+            .createQueryBuilder('estudiante')
+            .innerJoin('estudiante.actividades', 'actividad')
+            .where('actividad.id = :actividadId', { actividadId: actividad.id })
+            .getCount();
+
+        if (totalInscritos >= actividad.cupoMaximo) {
+            throw new BadRequestException('Sin cupos');
+        }
+
+        const yaInscrito = estudiante.actividades.some(a => a.id === actividad.id);
+        if (yaInscrito) {
+            throw new BadRequestException('El estudiante ya está inscrito en esta actividad');
+        }
+
+        estudiante.actividades.push(actividad);
+        await this.estudianteRepository.save(estudiante);
+
         return 'Se ha incrito al estudiante a la actividad';
     }
+
+
 }

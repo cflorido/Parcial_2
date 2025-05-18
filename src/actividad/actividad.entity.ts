@@ -20,7 +20,6 @@ export class ActividadEntity {
     estado: number; 
 
     @ManyToMany(() => EstudianteEntity, estudiante => estudiante.actividades)
-    @JoinTable()
     estudiantes: EstudianteEntity[];     
 
     @OneToMany(() => ResenaEntity, resena => resena.actividad)
