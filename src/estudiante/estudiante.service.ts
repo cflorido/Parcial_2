@@ -55,9 +55,6 @@ export class EstudianteService {
             throw new BadRequestException('Actividad no disponible');
         }
 
-    
-        const inscritos = estudiante.actividades.filter(a => a.id === actividad.id).length;
-
         const totalInscritos = await this.estudianteRepository
             .createQueryBuilder('estudiante')
             .innerJoin('estudiante.actividades', 'actividad')
@@ -68,12 +65,13 @@ export class EstudianteService {
             throw new BadRequestException('Sin cupos');
         }
 
-        const yaInscrito = estudiante.actividades.some(a => a.id === actividad.id);
+        const yaInscrito = estudiante.actividades.some(act => act.id === actividad.id);
         if (yaInscrito) {
             throw new BadRequestException('El estudiante ya está inscrito en esta actividad');
         }
 
         estudiante.actividades.push(actividad);
+
         await this.estudianteRepository.save(estudiante);
 
         return 'Se ha incrito al estudiante a la actividad';
